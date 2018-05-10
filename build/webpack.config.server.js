@@ -1,26 +1,34 @@
 const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 const webpack = require('webpack')
-const HTMLplugin = require('html-webpack-plugin')
-
+const ExtractPlugin = require('extract-text-webpack-plugin')
+const VueServerPlugin = require('vue-server-renderer/server-plugin')
 
 const isDev = process.env.NODE_ENV === 'development'
 
 let config
 config = {
 	mode: process.env.NODE_ENV,
-	target: 'web',
-	entry: path.join(__dirname, '../src/index.js'),
+	target: 'node',
+	devtool: 'source-map',
+	entry: path.join(__dirname, '../src/server-entry.js'),
 	output: {
-    path: path.join(__dirname, '../dist'),
+		libraryTarget: 'commonjs2',
+    path: path.join(__dirname, '../server-dist'),
     filename: 'bundle.js'
   },
+  externals: Object.keys(require('../package.json').dependencies),
   module: {
   	rules:[
 	  	{
-	  		test:/\.css$/,
-	  		use:['style-loader','css-loader'],
-	  		exclude: /node_modules/
+	  		test: /\.styl/,
+	  		use: ExtractPlugin.extract({
+          fallback: 'vue-style-loader',
+          use: [
+          'css-loader',         
+          'stylus-loader'
+          ]
+        })
 	  	},
 	  	{
 	  		test:/\.vue$/,
@@ -36,30 +44,9 @@ config = {
   		}
   	}),
     new VueLoaderPlugin(),
-    new HTMLplugin()//html
+    new VueServerPlugin(),
+    new ExtractPlugin('styles.[contentHash:8].css'),
   ]
-}
-
-if(isDev){
-	//调试代码
-	config.devtool = '#cheap-module-eval-source-map'
-	//dev-server
-	config.devServer = {
-		port: 8000,
-		host: '0.0.0.0',
-		overlay: {
-			errors: true
-		},
-		historyApiFallback: {
-			index: '/index.html'
-  	},//history模式手动刷新url会发送请求，出现错误
-		hot: true
-	}
-	//热加载
-	config.plugins.push(
-		new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-  )
 }
 
 module.exports = config

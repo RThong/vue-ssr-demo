@@ -9,10 +9,9 @@ Vue.use(VueRouter)
 
 const router = createRouter()
 
-const root = document.createElement('div')
-document.body.appendChild(root)
 
 new Vue({
+	el: '#root',
 	router,
 	render: (h) => h(App)
-}).$mount(root)
+})

@@ -2,6 +2,7 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 const webpack = require('webpack')
 const HTMLplugin = require('html-webpack-plugin')
+const VueClientPlugin = require('vue-server-renderer/client-plugin')
 
 
 const isDev = process.env.NODE_ENV === 'development'
@@ -10,7 +11,7 @@ let config
 config = {
 	mode: process.env.NODE_ENV,
 	target: 'web',
-	entry: path.join(__dirname, '../src/index.js'),
+	entry: path.join(__dirname, '../src/client-entry.js'),
 	output: {
     path: path.join(__dirname, '../dist'),
     filename: 'bundle.js'
@@ -18,9 +19,12 @@ config = {
   module: {
   	rules:[
 	  	{
-	  		test:/\.css$/,
-	  		use:['style-loader','css-loader'],
-	  		exclude: /node_modules/
+	  		test: /\.styl/,
+	  		use: [
+	  		'vue-style-loader',
+	  		'css-loader',
+	  		'stylus-loader'
+	  		]
 	  	},
 	  	{
 	  		test:/\.vue$/,
@@ -36,7 +40,10 @@ config = {
   		}
   	}),
     new VueLoaderPlugin(),
-    new HTMLplugin()//html
+    new HTMLplugin({
+	    template: path.join(__dirname, 'template.html')
+	  }),//html
+	  new VueClientPlugin()
   ]
 }
 

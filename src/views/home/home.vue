@@ -10,7 +10,7 @@
 		}
 	}
 </script>
-<style>
+<style lang="stylus" scoped>
 	.test{
 		color: red;
 	}
