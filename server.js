@@ -62,7 +62,7 @@ router.get('*', async (ctx) => {
 		return
 	}
 	//为返回给客户端添加html  和前端路由交互的js
-	const clientManifestResp = await axios.get('http://127.0.0.1:8000/vue-ssr-client-manifest.json')
+	const clientManifestResp = await axios.get('http://127.0.0.1:8000/public/vue-ssr-client-manifest.json')
 	const clientManifest = clientManifestResp.data
 	// console.log('---------------------------------',clientManifest)
 	//读取template模板

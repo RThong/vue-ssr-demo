@@ -17,7 +17,6 @@ export default context => {
       if (!matchedComponents.length) {
         return reject(new Error('no component matched'))
       }
- console.log('-----------------------------------')
       // Promise 应该 resolve 应用程序实例，以便它可以渲染
       resolve(app)
     }, reject)

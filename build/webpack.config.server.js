@@ -39,13 +39,12 @@ config = {
   plugins: [
   	//定义环境变量
   	new webpack.DefinePlugin({
-  		'process.env': {
-  			NODE_ENV: isDev ? '"development"': '"production"'
-  		}
-  	}),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.VUE_ENV': '"server"'
+    }),
     new VueLoaderPlugin(),
     new VueServerPlugin(),
-    new ExtractPlugin('styles.[contentHash:8].css'),
+    new ExtractPlugin('styles.css'),
   ]
 }
 

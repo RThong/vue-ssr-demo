@@ -14,7 +14,8 @@ config = {
 	entry: path.join(__dirname, '../src/client-entry.js'),
 	output: {
     path: path.join(__dirname, '../dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: 'http://127.0.0.1:8000/public/'
   },
   module: {
   	rules:[
@@ -58,7 +59,7 @@ if(isDev){
 			errors: true
 		},
 		historyApiFallback: {
-			index: '/index.html'
+			index: '/public/index.html'
   	},//history模式手动刷新url会发送请求，出现错误
 		hot: true
 	}
